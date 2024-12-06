@@ -1,17 +1,18 @@
-import { Divider } from '@mui/material';
 import React from 'react';
+import { Divider } from '@mui/material';
 
-const PricingCart = () => {
+const PricingCart = ({ totalSellingPrice, totalItem, totalMrpPrice, discount }) => {
+  const formattedDiscount = (discount).toFixed(2); 
   return (
     <div className="space-y-3 p-5">
       <div className="flex justify-between items-center">
         <span>Subtotal</span>
-        <span>899</span>
+        <span>{totalSellingPrice}</span>
       </div>
 
       <div className="flex justify-between items-center">
         <span>Discount</span>
-        <span>599</span>
+        <span>{formattedDiscount}%</span>
       </div>
 
       <div className="flex justify-between items-center">
@@ -26,12 +27,16 @@ const PricingCart = () => {
 
       <Divider />
 
-      <div className="flex justify-between items-center p-5 text-primary-color">
+      <div className="flex justify-between items-center p-3 text-[#6a1b9a]">
         <span>Total</span>
-        <span>678</span>
+        <span>{totalSellingPrice}</span>
       </div>
     </div>
   );
 };
 
 export default PricingCart;
+
+
+
+

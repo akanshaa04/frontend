@@ -5,6 +5,7 @@ import Deal from './Deal/Deal'
 import ShopByCategory from './ShopByCategory/ShopByCategory'
 import { Button } from '@mui/material';
 import Storefront from '@mui/icons-material/Storefront';
+import Footer from '../../Components/Footer/footer'
 
 const Home = () => {
   return (
@@ -43,6 +44,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
     </div>
   )
 }

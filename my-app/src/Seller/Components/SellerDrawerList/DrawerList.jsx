@@ -19,8 +19,8 @@ const DrawerList = ({ menu, menu2, toggleDrawer }) => {
               <p
                 className={`${
                   item.path === location.pathname
-                    ? 'bg-primary-color text-white'
-                    : 'text-primary-color'
+                    ? 'bg-[#6a1b9a] text-white'
+                    : 'text-[#6a1b9a]'
                 } flex items-center px-5 py-3 rounded-r-full`}
               >
                 <ListItemIcon>
@@ -44,8 +44,8 @@ const DrawerList = ({ menu, menu2, toggleDrawer }) => {
               <p
                 className={`${
                   item.path === location.pathname
-                    ? 'bg-primary-color text-white'
-                    : 'text-primary-color'
+                    ? 'bg-[#6a1b9a] text-white'
+                    : 'text-[#6a1b9a]'
                 } flex items-center px-5 py-3 rounded-r-full`}
               >
                 <ListItemIcon>

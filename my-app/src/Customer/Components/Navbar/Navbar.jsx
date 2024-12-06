@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -21,17 +21,31 @@ const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState('men');
   const [showCategorySheet, setShowCategorySheet] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      if (userData) {
+        setUser(userData); 
+      }
+    }
+  }, []);
+
   const handleLogin = (userData) => {
-    console.log("Logged in user data:", userData); 
+    console.log('Logged in user data:', userData);
     setUser(userData); 
+    localStorage.setItem('userData', JSON.stringify(userData)); 
     setModalOpen(false);
   };
 
   const handleLogout = () => {
-    setUser(null);
+    setUser(null); 
+    localStorage.removeItem('userToken'); 
+    localStorage.removeItem('userData'); 
+    navigate('/'); 
   };
 
   return (
@@ -78,7 +92,7 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center">
                 <Avatar>{user.fullName[0]}</Avatar>
-                <span className="ml-2">{user.fullName}</span> 
+                <span className="ml-2">{user.fullName}</span>
                 <Button onClick={handleLogout} sx={{ ml: 2 }}>
                   Logout
                 </Button>
@@ -90,7 +104,7 @@ const Navbar = () => {
                   color: 'white',
                   backgroundColor: theme.palette.primary.main,
                 }}
-                onClick={() => setModalOpen(true)} 
+                onClick={() => setModalOpen(true)}
               >
                 Login
               </Button>
@@ -102,6 +116,8 @@ const Navbar = () => {
             <IconButton onClick={() => navigate('/cart')}>
               <AddShoppingCart className="text-grey-700" sx={{ fontSize: 29 }} />
             </IconButton>
+
+
 
             {isLarge && (
               <Button onClick={() => navigate('/become-seller')} variant="outlined">
@@ -125,10 +141,14 @@ const Navbar = () => {
       <LoginSignupModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onLogin={handleLogin} 
+        onLogin={handleLogin}
       />
     </div>
   );
 };
 
 export default Navbar;
+
+
+
+

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Grid, TextField } from '@mui/material';
 
-const PickupAddress = () => {
+const AddressForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
@@ -139,4 +139,4 @@ const PickupAddress = () => {
   );
 };
 
-export default PickupAddress;
+export default AddressForm;
