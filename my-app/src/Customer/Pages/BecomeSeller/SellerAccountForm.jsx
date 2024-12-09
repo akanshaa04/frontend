@@ -1,10 +1,12 @@
-import { Button, Step, StepLabel, Stepper } from '@mui/material';
 import React, { useState } from 'react';
+import { Button, Step, StepLabel, Stepper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';  // Use useNavigate for navigation
 import BecomeSellerFormStep1 from './BecomeSellerFormStep1';
-import { useFormik } from 'formik';
 import BecomeSellerFromStep2 from './BecomeSellerFromStep2';
-import BecomeSellerFormStep4 from './BecomeSellerFormStep4';
 import BecomeSellerFromStep3 from './BecomeSellerFromStep3';
+import BecomeSellerFormStep4 from './BecomeSellerFormStep4';
+import { useFormik } from 'formik';
+import axios from 'axios';
 
 const steps = [
   "Tax Details & Mobile",
@@ -15,19 +17,34 @@ const steps = [
 
 const SellerAccountForm = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const navigate = useNavigate(); // for navigation
 
   const handleStep = (value) => () => {
-    if (value === -1)
+    if (value === -1) {
       activeStep > 0 && setActiveStep(activeStep + value);
-
-    if (value === 1)
+    }
+    if (value === 1) {
       activeStep < (steps.length - 1) && setActiveStep(activeStep + value);
-
-    activeStep === steps.length - 1 && handleCreateAccount();
+    }
+    if (activeStep === steps.length - 1) {
+      handleCreateAccount();
+    }
   };
 
-  const handleCreateAccount = () => {
-    console.log("Create Account");
+  const handleCreateAccount = async () => {
+    try {
+      // Send the data to your backend to create the seller
+      const response = await axios.post('http://localhost:8080/seller', formik.values);
+
+      // Alert to the seller that they need to verify their email
+      alert('Account created successfully. Please check your email to verify your account.');
+
+      // Navigate to the verify seller page after creating the account
+      navigate('/verify-seller');  // Directly navigate to verify-seller page (without OTP in URL initially)
+    } catch (error) {
+      console.error('Error creating account:', error);
+      alert('Error creating account. Please try again.');
+    }
   };
 
   const formik = useFormik({
@@ -35,7 +52,7 @@ const SellerAccountForm = () => {
       mobile: "",
       otp: "",
       gstin: "",
-      pickupAddres: {
+      pickupAddress: {
         name: "",
         mobile: "",
         pincode: "",
@@ -54,7 +71,7 @@ const SellerAccountForm = () => {
       businessDetails: {
         businessName: "",
         businessEmail: "",
-        businesMobile: "",
+        businessMobile: "",
         logo: "",
         banner: "",
         businessAddress: "",
@@ -99,9 +116,5 @@ const SellerAccountForm = () => {
 };
 
 export default SellerAccountForm;
-
-
-
-
 
 

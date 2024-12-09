@@ -20,6 +20,8 @@ import BecomeSeller from './Customer/Pages/BecomeSeller/BecomeSeller';
 import Footer from './Customer/Components/Footer/footer';
 import Account from './Customer/Pages/Account/Account';
 import Checkout from './Customer/Pages/Checkout/Checkout';
+import VerifySellerPage from './Customer/Pages/BecomeSeller/VerifySellerPage';
+import Wishlist from './Customer/Wishlist/Wishlist';
 
 function App() {
   return (
@@ -34,18 +36,23 @@ function App() {
             element={<ProductDetails />}
           />
           <Route path="/cart" element={<Cart />} />
+          <Route path='/wishlist' element={<Wishlist />}></Route>
+
           <Route
             path="/login"
             element={<LoginSignupModal isOpen={true} onClose={() => window.history.back()} />}
           />
           <Route path="/become-seller" element={<BecomeSeller />} />
-
+          <Route path="/verify-seller" element={<VerifySellerPage />}/>
           <Route path="/seller/*" element={<SellerDashboard />} />
-
 
           {/* <Route path="/product-review-page" element={<Review />} /> */}
           <Route path='/checkout' element={<Checkout/>}/>
           <Route path='/user' element={<Account/>}></Route>
+
+          <Route path='/account/*' element={<Account/>}></Route>
+            {/* <Route path="/product-details" element={<ProductDetails />} /> */}
+            {/* <Route path="/product-review-page" element={<Review />} /> */}
         </Routes>
         <Footer />
 

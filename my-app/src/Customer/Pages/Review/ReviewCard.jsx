@@ -1,27 +1,40 @@
+import { Delete } from '@mui/icons-material';
+import { Avatar, Box, Grid, IconButton, Rating } from '@mui/material';
 import React from 'react';
 
 const ReviewCard = () => {
   return (
-    <div className="review-card p-4 border rounded-md shadow-lg">
-      <div className="flex items-center">
-        <img
-          src="https://randomuser.me/api/portraits/men/1.jpg"
-          alt="Reviewer"
-          className="w-12 h-12 rounded-full mr-3"
-        />
-        <div>
-          <h3 className="font-semibold text-lg">John Doe</h3>
-          <p className="text-gray-500 text-sm">Verified Buyer</p>
-        </div>
-      </div>
-      <div className="review-content mt-3">
-        <p className="text-gray-700">
-          "This product is excellent! The quality is amazing, and it looks exactly like the photos. Highly recommend!"
-        </p>
-      </div>
-      <div className="review-rating mt-2 flex items-center">
-        <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
-        <span className="ml-2 text-gray-600">5/5</span>
+    <div className="flex justify-between">
+      <Grid container spacing={8}>
+        <Grid item xs={3}>
+          <Box>
+            <Avatar className="text-white" sx={{ width: 56, height: 56, bgcolor: "#9155FD" }}>
+              Z
+            </Avatar>
+          </Box>
+        </Grid>
+        <Grid item xs={9}>
+          <div className="space-y-2">
+            <div>
+              <p className="font-semibold text-lg">Trendly</p>
+              <p className="opacity-70">2024-12-03</p>
+            </div>
+          </div>
+          <Rating readOnly value={4} precision={1} />
+          <p>Value for money product</p>
+          <div>
+            <img
+              className="w-24 h-24 object-cover"
+              src="https://images.unsplash.com/photo-1692992193981-d3d92fabd9cb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDd8fHNhcmVlJTIwdG8lMjBzb2xkfGVufDB8MXwwfHx8MA%3D%3D"
+              alt=""
+            />
+          </div>
+        </Grid>
+      </Grid>
+      <div>
+        <IconButton color="error">
+          <Delete />
+        </IconButton>
       </div>
     </div>
   );

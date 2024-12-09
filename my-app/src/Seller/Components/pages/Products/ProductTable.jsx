@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, TablePagination } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -34,10 +34,14 @@ export default function ProductTable() {
   const [products, setProducts] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [totalProducts, setTotalProducts] = React.useState(0); // To hold the total number of products
 
+  // Fetch products on component mount or page change
   React.useEffect(() => {
     const fetchProducts = async () => {
-      const sellerToken = localStorage.getItem('sellerToken');  
+      const sellerToken = localStorage.getItem('sellerToken');
       if (!sellerToken) {
         setError('Seller token not found');
         setLoading(false);
@@ -49,8 +53,15 @@ export default function ProductTable() {
           headers: {
             Authorization: `Bearer ${sellerToken}`,
           },
+          params: {
+            sellerId: 1,  // Replace with actual seller ID
+            page: page,
+            size: rowsPerPage,
+          },
         });
-        setProducts(response.data);  // Assuming the API returns the products in the 'data' field
+
+        setProducts(response.data.content);  // Assuming the API returns `content` as product list
+        setTotalProducts(response.data.totalElements); // Update the total products count
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch products');
@@ -59,7 +70,16 @@ export default function ProductTable() {
     };
 
     fetchProducts();
-  }, []);
+  }, [page, rowsPerPage]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage); // Update page state when page changes
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10)); // Update rows per page
+    setPage(0); // Reset to first page when rows per page changes
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -94,13 +114,13 @@ export default function ProductTable() {
                       key={index}
                       className="w-20 rounded-md"
                       alt={`Product Image ${index + 1}`}
-                      src={image}  // Assuming image URLs are directly in the product data
+                      src={image}
                     />
                   ))}
                 </div>
               </StyledTableCell>
               <StyledTableCell align="right">{product.title}</StyledTableCell>
-              <StyledTableCell align="right">₹{product.mrpPrice}</StyledTableCell>
+              <StyledTableCell align="right">₹{product.mrp}</StyledTableCell>
               <StyledTableCell align="right">₹{product.sellingPrice}</StyledTableCell>
               <StyledTableCell align="right">{product.color}</StyledTableCell>
               <StyledTableCell align="right">
@@ -115,6 +135,16 @@ export default function ProductTable() {
           ))}
         </TableBody>
       </Table>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={totalProducts}  // Use total number of products from the backend
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableContainer>
   );
 }

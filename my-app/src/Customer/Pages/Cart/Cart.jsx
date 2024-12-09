@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const [cartData, setCartData] = useState(null);
   const [couponCode, setCouponCode] = useState('');
+  const [isCouponApplied, setIsCouponApplied] = useState(false); // Track if coupon is applied
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +40,72 @@ const Cart = () => {
   const handleChange = (e) => {
     setCouponCode(e.target.value);
   };
+
+
+  const handleApplyCoupon = async () => {
+    const userToken = localStorage.getItem('userToken');
+ 
+    if (!couponCode) {
+      alert('Please enter a valid coupon code.');
+      return;
+    }
+ 
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/coupons',
+        null,
+        {
+          params: {
+            code: couponCode, // Pass the coupon code here
+            apply: 'true', // Apply coupon
+            orderValue: cartData?.totalSellingPrice || 0,
+          },
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
+ 
+      if (response.data) {
+        setCartData(response.data);
+        setIsCouponApplied(true); // Set coupon as applied
+        setCouponCode(''); // Clear the coupon code input after applying
+      }
+    } catch (error) {
+      console.error('Error applying coupon:', error);
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    const userToken = localStorage.getItem('userToken');
+ 
+    if (!couponCode) {
+      alert('Coupon code not found');
+      return;
+    }
+ 
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/coupons',
+        null,
+        {
+          params: {
+            code: couponCode, // Pass the coupon code here when removing it
+            apply: 'false', // Set apply to false to remove the coupon
+            orderValue: cartData?.totalSellingPrice || 0, // Pass the current order value
+          },
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
+ 
+      if (response.data) {
+        setCartData(response.data); // Update cart data after removing coupon
+        setIsCouponApplied(false); // Mark coupon as removed
+        setCouponCode(''); // Clear the coupon code field
+      }
+    } catch (error) {
+      console.error('Error removing coupon:', error);
+    }
+  };
+ 
 
   
   const removeCartItem = async (itemId) => {
@@ -119,7 +186,7 @@ const Cart = () => {
                 <span>Apply Coupons</span>
               </div>
 
-              {cartData.couponCode ? (
+              {/* {cartData.couponCode ? (
                 <div className="flex">
                   <div className="p-1 pl-5 pr-3 border rounded-md flex gap-2 items-center">
                     <span>Applied</span>
@@ -138,6 +205,38 @@ const Cart = () => {
                     variant="outlined"
                   />
                   <Button size="small">Apply</Button>
+                </div>
+              )} */}
+
+
+{isCouponApplied ? (
+                <div className="flex">
+                  <div className="p-1 pl-5 pr-3 border rounded-md flex gap-2 items-center">
+                    <span>Coupon Applied</span>
+                    <IconButton
+                      size="small"
+                      onClick={handleRemoveCoupon} // Removes coupon
+                    >
+                      <Close className="text-red-500" />
+                    </IconButton>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center">
+                  <TextField
+                    onChange={handleChange}
+                    value={couponCode}
+                    id="outlined-basic"
+                    placeholder="Enter coupon code"
+                    size="small"
+                    variant="outlined"
+                  />
+                  <Button
+                    size="small"
+                    onClick={handleApplyCoupon} // Applies coupon
+                  >
+                    Apply
+                  </Button>
                 </div>
               )}
             </div>

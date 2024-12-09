@@ -54,16 +54,16 @@ export const MainCategory = [
         categoryId: "home_furniture",
         level: 1
     },
-    {
-        name: "Beauty",
-        categoryId: "kids",
-        level: 1
-    },
-    {
-        name: "Books",
-        categoryId: "books",
-        level: 1
-    },
+    // {
+    //     name: "Beauty",
+    //     categoryId: "kids",
+    //     level: 1
+    // },
+    // {
+    //     name: "Books",
+    //     categoryId: "books",
+    //     level: 1
+    // },
     {
         name: "Electronics",
         categoryId: "electronics",
